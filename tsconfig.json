@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+      "target": "es2017",
+      "module": "commonjs",
+      "esModuleInterop": true,
+      "outDir": "dist",
+      "sourceMap": true
+    },
+    "include": [
+      "src/gql/main.ts",
+      "src/auth/main.ts"
+    ]
+  }

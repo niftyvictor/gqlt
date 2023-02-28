@@ -1,0 +1,58 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgis/postgis:15-3.3
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_DB}
+    ports:
+      - "5432:5432"
+
+  hasura:
+    image: hasura/graphql-engine:v2.0.9
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: "postgres://${DATABASE_USER}:${DATABASE_PASSWORD}@db:5432/${DATABASE_DB}"
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+      HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
+      HASURA_GRAPHQL_JWT_SECRET: ${HASURA_GRAPHQL_JWT_SECRET}
+      HASURA_GRAPHQL_ENABLE_REMOTE_SCHEMA_PERMISSIONS: "true"
+      HASURA_GRAPHQL_APP_REMOTE_SOURCE_HOST: http://app:4000
+      APP_REMOTE_SOURCE_HOST: http://app:4000
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+      - app
+
+  app:
+    build: .
+    environment:
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_DB: ${DATABASE_DB}
+      DATABASE_HOST: db:5432
+      DATABASE_URL: "postgres://${DATABASE_USER}:${DATABASE_PASSWORD}@db:5432/${DATABASE_DB}"
+      HASURA_GRAPHQL_ENDPOINT: http://hasura:8080/v1/graphql
+      HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
+      HASURA_GRAPHQL_JWT_SECRET: ${HASURA_GRAPHQL_JWT_SECRET}
+      GQL_PORT: ${GQL_PORT}
+      AUTH_PORT: ${AUTH_PORT}
+    ports:
+      - "4000:${GQL_PORT}"
+      - "3000:${AUTH_PORT}"
+    depends_on:
+      db:
+        condition: service_healthy
+    image: node
+    working_dir: /usr/src/app
+    volumes:
+      - ./dist:/usr/src/app
+    depends_on:
+      - db
+
+volumes:
+  db_data:
