@@ -43,8 +43,8 @@ export const register = ({ prisma }: { prisma: PrismaClient }) => {
     return resSuccApi(res, {
       token: generateJWT({
         userId: user.id,
-        defaultRole: "user",
-        allowedRoles: ["user"],
+        defaultRole: "admin",
+        allowedRoles: ["admin"],
         otherClaims: {
           "X-Hasura-User-Id": user.id,
         },
