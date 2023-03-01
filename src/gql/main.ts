@@ -73,5 +73,5 @@ const server = new ApolloServer({
 });
 
 server.listen({ port: process.env.GQL_PORT }).then(({ url }) => {
-  console.log(`🚀 Server ready at ${url}`);
+  console.log(`🚀 Gql server running on port ${process.env.GQL_PORT}`);
 });

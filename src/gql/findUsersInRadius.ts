@@ -28,8 +28,6 @@ export const findUsersInRadius = ({ prisma }: { prisma: PrismaClient }) => {
     const [locationError, response] = await to(prisma.$queryRawUnsafe(query));
     if (locationError) return resErrGql(locationError);
 
-    console.log("plm", response);
-
     return resSuccGql({ User: response });
   };
 };

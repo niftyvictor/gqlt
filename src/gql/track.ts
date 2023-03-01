@@ -25,7 +25,6 @@ export const track = ({ prisma }: { prisma: PrismaClient }) => {
     const [locationError, response] = await to(prisma.$queryRawUnsafe(query));
     if (locationError) return resErrGql(locationError);
 
-    console.log(response);
     return resSuccGql(true);
   };
 };

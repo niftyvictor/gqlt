@@ -16,5 +16,5 @@ app.post("/auth/register", register({ prisma }));
 app.post("/auth/authenticate", authenticate({ prisma }));
 
 app.listen(process.env.AUTH_PORT, () => {
-  console.log(`Auth server running on port ${process.env.AUTH_PORT}.`);
+  console.log(`🚀 Auth server running on port ${process.env.AUTH_PORT}.`);
 });
