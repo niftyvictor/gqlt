@@ -44,9 +44,6 @@ services:
     ports:
       - "4000:${GQL_PORT}"
       - "3000:${AUTH_PORT}"
-    depends_on:
-      db:
-        condition: service_healthy
     image: node
     working_dir: /usr/src/app
     volumes:
